@@ -40,26 +40,27 @@
 <body>
 	<div id="map"></div>
 	<script>
-
-		const apiKey = "AAPK186e2fa974b5453981bc0cb90745504bNtN7e6z9UIHvV2-ikmdLl6Kfk2lfvRk-GN2aB31SaWBBG180LIDlNBParmiTAhaI";
-		const tileLayerUrl = 'https://tiles.arcgis.com/tiles/TNoJFjk1LsD45Juj/arcgis/rest/services/basemap_1/MapServer';
-
-
+		const baseTileLayerUrl = 'https://tiles.arcgis.com/tiles/TNoJFjk1LsD45Juj/arcgis/rest/services/basemap_1/MapServer';
 
 		const map = L.map("map", {
 			minZoom: 2
 		}).setView([33.97, -118.365], 13);
 
 		L.esri.tiledMapLayer({
-			url: tileLayerUrl
-		})
-			.addTo(map);
+			url: baseTileLayerUrl
+		}).addTo(map);
+		
 		var kline = L.esri
+			.featureLayer({
+				url: "https://services8.arcgis.com/TNoJFjk1LsD45Juj/arcgis/rest/services/Crenshaw_LAX/FeatureServer/0"
+			})
+			.addTo(map);
+		
+		var kline_stations = L.esri
 			.featureLayer({
 				url: "https://services8.arcgis.com/TNoJFjk1LsD45Juj/arcgis/rest/services/K_Line_Stations/FeatureServer/0"
 			})
 			.addTo(map);
-
 
 	</script>
 </body>

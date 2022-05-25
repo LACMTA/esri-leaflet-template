@@ -1,10 +1,23 @@
 // svg plugin
 // https://github.com/hiasinho/Leaflet.vector-markers
 
-const baseVectorLayer = 'https://tiles.arcgis.com/tiles/TNoJFjk1LsD45Juj/arcgis/rest/services/Hybrid_Vector_tile_Map/VectorTileServer';
+const apiKey = "AAPKc66f8690d8d2454d963dd7c12cdab9e8c5dqRerctjfPU5vLx9roiusqv3FdffU1X3eU934Ynqc8mUXiFrY_Ku9efOhg7j6X";
+
+// https://lametro.maps.arcgis.com/home/item.html?id=3e8ed9ba7e8b47d2a4adbad44c9fa635
+const vectorBasemapId = '3e8ed9ba7e8b47d2a4adbad44c9fa635';
+const vectorBasemap = 'https://tiles.arcgis.com/tiles/TNoJFjk1LsD45Juj/arcgis/rest/services/Hybrid_Vector_tile_Map/VectorTileServer';
+
+// https://lametro.maps.arcgis.com/home/item.html?id=9cdfb642ece140f79cca0b85fd44ede6
+const rasterBaseMap = 'https://tiles.arcgis.com/tiles/TNoJFjk1LsD45Juj/arcgis/rest/services/basemap_1/MapServer';
+
+// https://lametro.maps.arcgis.com/home/item.html?id=533d93cc415e48ac9cc179461cf4e9b0
 const railLinesLayer = 'https://tiles.arcgis.com/tiles/TNoJFjk1LsD45Juj/arcgis/rest/services/Hybrid_Raster_tile_Map/MapServer';
 
-const apiKey = "AAPKc66f8690d8d2454d963dd7c12cdab9e8c5dqRerctjfPU5vLx9roiusqv3FdffU1X3eU934Ynqc8mUXiFrY_Ku9efOhg7j6X";
+// https://lametro.maps.arcgis.com/home/item.html?id=1d5f6c3de4d7488d8381508d725f6944
+const kLineLayer = 'https://services8.arcgis.com/TNoJFjk1LsD45Juj/arcgis/rest/services/Crenshaw_LAX/FeatureServer/1';
+
+// https://lametro.maps.arcgis.com/home/item.html?id=999c86a275854e71b00e5787f6e8df6d&sublayer=0
+const kLineStationsLayer = 'https://services8.arcgis.com/TNoJFjk1LsD45Juj/arcgis/rest/services/K_Line_Stations/FeatureServer/0';
 
 const map = L.map("map", {
     minZoom: 2
@@ -15,22 +28,30 @@ const icon = L.icon({
     iconSize: [18, 18]
     });
 
-L.esri.Vector.vectorTileLayer(baseVectorLayer, {
-  "apiKey": apiKey
-})
-.addTo(map);
+L.esri.tiledMapLayer({url: rasterBaseMap}).addTo(map);
 
-L.esri.tiledMapLayer({
-  url: railLinesLayer
-}).addTo(map);
+// This vector layer is triggering mapbox-gl errors
+// L.esri.Vector.vectorBasemapLayer(baseVectorLayerId, {
+//   apiKey: apiKey
+// })
+// .addTo(map);
+
+// L.esri.tiledMapLayer({
+//   url: railLinesLayer
+// }).addTo(map);
 
 let kline = L.esri
     .featureLayer({
-        url: "https://services8.arcgis.com/TNoJFjk1LsD45Juj/arcgis/rest/services/Crenshaw_LAX/FeatureServer/0",
+        url: kLineLayer,
         style: (feature) => {
+          let color = feature.properties.Name == "K Line" ? feature.properties.Color : "#888888";
+          //let color = feature.properties.Color;
+          let weight = feature.properties.Weight;
+          let dashArray = feature.properties.LinePattern;
           return {
-            color: feature.properties.Color,
-            weight: feature.properties.Weight,
+            color: color,
+            weight: weight,
+            dashArray: dashArray
           };
         }
     })
@@ -38,23 +59,20 @@ let kline = L.esri
 
 const kline_stations = L.esri
     .featureLayer({
-      url: "https://services8.arcgis.com/TNoJFjk1LsD45Juj/arcgis/rest/services/K_Line_Stations/FeatureServer/0",
+      url: kLineStationsLayer,
       pointToLayer: (geojson, latlng) => {
-        let station_icon = "https://raw.githubusercontent.com/LACMTA/engagement-tool/main/svg/station-01-ec-ws.svg"
         return L.marker(latlng, {
-          icon: new L.DivIcon({
-            html: `<div></div>`
-            })
+          icon: L.icon({
+            iconUrl: geojson.properties.SvgUrl,
+            iconSize: [geojson.properties.Width]
+          })
         });
+        // return L.marker(latlng, {
+        //   icon: new L.DivIcon({
+        //     html: '<img src="' + feature.properties.SvgUrl + '" />',
+        //     })
+        // });
       }
     })
     .addTo(map);
-
-
-// Colort icon:
-// Width: 6
-// color:   #e470aa
-// :Expo/Crensha w station
-// https://raw.githubusercontent.com/LACMTA/engagement-tool/main/svg/station-01-ec-ws.svg
-// */
 

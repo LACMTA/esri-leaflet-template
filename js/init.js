@@ -48,7 +48,8 @@ let kline = L.esri
           let color = feature.properties.Color;
           let weight = feature.properties.Weight;
           let dashArray = feature.properties.LinePattern;
-          console.log(dashArray);
+          
+          // this is a hack to get the line to be dashed because the line pattern is not working
           if (dashArray == "4 1"){
             dashArray = "4 10"
           } 

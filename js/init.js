@@ -20,7 +20,9 @@ const kLineLayer = 'https://services8.arcgis.com/TNoJFjk1LsD45Juj/arcgis/rest/se
 const kLineStationsLayer = 'https://services8.arcgis.com/TNoJFjk1LsD45Juj/arcgis/rest/services/K_Line_Stations/FeatureServer/0';
 
 const map = L.map("map", {
-    minZoom: 2
+    minZoom: 2,
+    dragging: !L.Browser.mobile,
+    tap: !L.Browser.mobile
 }).setView([33.97, -118.365], 13);
 
 const icon = L.icon({

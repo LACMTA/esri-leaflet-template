@@ -1,10 +1,8 @@
 // svg plugin
 // https://github.com/hiasinho/Leaflet.vector-markers
 
-const baseTileLayerUrl = 'https://tiles.arcgis.com/tiles/TNoJFjk1LsD45Juj/arcgis/rest/services/Hybrid_Raster_tile_Map/MapServer';
-const railLinesLayer = 'https://tiles.arcgis.com/tiles/TNoJFjk1LsD45Juj/arcgis/rest/services/Hybrid_Vector_tile_Map/VectorTileServer';
-
-
+const baseVectorLayer = 'https://tiles.arcgis.com/tiles/TNoJFjk1LsD45Juj/arcgis/rest/services/Hybrid_Vector_tile_Map/VectorTileServer';
+const railLinesLayer = 'https://tiles.arcgis.com/tiles/TNoJFjk1LsD45Juj/arcgis/rest/services/Hybrid_Raster_tile_Map/MapServer';
 
 const apiKey = "AAPKc66f8690d8d2454d963dd7c12cdab9e8c5dqRerctjfPU5vLx9roiusqv3FdffU1X3eU934Ynqc8mUXiFrY_Ku9efOhg7j6X";
 
@@ -17,22 +15,22 @@ const icon = L.icon({
     iconSize: [18, 18]
     });
 
-L.esri.tiledMapLayer({
-    url: baseTileLayerUrl
-}).addTo(map);
-
-L.esri.Vector.vectorBasemapLayer(railLinesLayer,{
+L.esri.Vector.vectorTileLayer(baseVectorLayer, {
   "apiKey": apiKey
 })
 .addTo(map);
+
+L.esri.tiledMapLayer({
+  url: railLinesLayer
+}).addTo(map);
 
 let kline = L.esri
     .featureLayer({
         url: "https://services8.arcgis.com/TNoJFjk1LsD45Juj/arcgis/rest/services/Crenshaw_LAX/FeatureServer/0",
         style: (feature) => {
           return {
-            color: "#E470AA",
-            weight: "10",
+            color: feature.properties.Color,
+            weight: feature.properties.Weight,
           };
         }
     })

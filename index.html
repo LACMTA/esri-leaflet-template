@@ -15,9 +15,17 @@
 	<script src="https://unpkg.com/esri-leaflet-vector@^3.1.0/dist/esri-leaflet-vector.js"></script>
 
 	<style>
+		@font-face {
+			font-family: 'D-DIN';
+			src: url('fonts/D-DIN.woff2') format('woff2'),
+				url('fonts/D-DIN.woff') format('woff');
+			font-weight: normal;
+			font-style: normal;
+		}
 		body {
 			margin: 0;
 			padding: 0;
+			font-family: 'D-DIN', sans-serif;
 		}
 
 		#map {
@@ -26,9 +34,10 @@
 			bottom: 0;
 			right: 0;
 			left: 0;
-			font-family: Arial, Helvetica, sans-serif;
-			font-size: 14px;
 			color: #323232;
+			font-family: 'D-DIN', sans-serif;
+			font-size: 11px;
+			letter-spacing: 0.05em;
 		}
 		#map div.station-icon-wrapper {
 			width: 120px;
@@ -42,8 +51,7 @@
 			color: #fff;
 			background-color: #000;
 			font-weight: 600;
-			padding: 0 3px;
-			font-size: 10px;
+			padding: 1px 3px;
 		}
 	</style>
 	<link rel="stylesheet" href="css/leaflet-vector-markers.css">

@@ -44,14 +44,18 @@ let kline = L.esri
     .featureLayer({
         url: kLineLayer,
         style: (feature) => {
-          let color = feature.properties.Name == "K Line" ? feature.properties.Color : "#888888";
-          //let color = feature.properties.Color;
+          // let color = feature.properties.Name == "K Line" ? feature.properties.Color : "#888888";
+          let color = feature.properties.Color;
           let weight = feature.properties.Weight;
           let dashArray = feature.properties.LinePattern;
+          console.log(dashArray);
+          if (dashArray == "4 1"){
+            dashArray = "4 10"
+          } 
           return {
             color: color,
             weight: weight,
-            dashArray: dashArray
+            dashArray: `${dashArray}`
           };
         }
     })
@@ -61,12 +65,6 @@ const kline_stations = L.esri
     .featureLayer({
       url: kLineStationsLayer,
       pointToLayer: (geojson, latlng) => {
-        // return L.marker(latlng, {
-        //   icon: L.icon({
-        //     iconUrl: geojson.properties.SvgUrl,
-        //     iconSize: [geojson.properties.Width]
-        //   })
-        // });
         return L.marker(latlng, {
           icon: new L.DivIcon({
             className: 'station-icon',

@@ -61,17 +61,26 @@ const kline_stations = L.esri
     .featureLayer({
       url: kLineStationsLayer,
       pointToLayer: (geojson, latlng) => {
-        return L.marker(latlng, {
-          icon: L.icon({
-            iconUrl: geojson.properties.SvgUrl,
-            iconSize: [geojson.properties.Width]
-          })
-        });
         // return L.marker(latlng, {
-        //   icon: new L.DivIcon({
-        //     html: '<img src="' + feature.properties.SvgUrl + '" />',
-        //     })
+        //   icon: L.icon({
+        //     iconUrl: geojson.properties.SvgUrl,
+        //     iconSize: [geojson.properties.Width]
+        //   })
         // });
+        return L.marker(latlng, {
+          icon: new L.DivIcon({
+            className: 'station-icon',
+            iconSize: null,
+            html: `
+            <div class="station-icon-wrapper">
+              <div class="station-label">${geojson.properties.Station}</div>
+              <svg id="svgelem" height="15" width="15" stroke="black" fill="white" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="7" cy="7" r="5" stroke-width="2.5"/>
+              </svg>
+            </div>
+            `,
+            })
+        });
       }
     })
     .addTo(map);
